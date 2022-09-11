@@ -21,4 +21,4 @@ const dataMockId = {
 module.exports = {
   dataMock,
   dataMockId,
-}
+};

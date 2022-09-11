@@ -1,17 +1,10 @@
-const chai = require('chai');
 const sinon = require('sinon');
-const sinonChai = require('sinon-chai');
+const index = require('../../../src/controllers/index');
+const { dataMock, dataMockId } = require('./mocks/products.controller.mock');
+const { services } = require('../../../src/services/products.service');
+const { controllers } = require('../../../src/controllers/products.controller');
 
-const { expect } = chai;
-chai.use(sinonChai);
-
-const { dataMock, dataMockId } = require('./mocks/products.mocks');
-const { services } = require('../../../src/services');
-const { controllers } = require('../../../src/controllers');
-
-describe('Testa 5% da camada de aplicação', () => {
-  afterEach(sinon.restore);
-
+describe('Testa camada controller da aplicação', () => {
   it('Testa se todos os produtos estão na lista', async () => {
     const res = {};
     const req = {};
@@ -19,17 +12,17 @@ describe('Testa 5% da camada de aplicação', () => {
     res.status = sinon.stub().returns(res);
     res.json = sinon.stub().returns();
 
-    sinon.stub(services, 'findAll').resolves({ type: null, message: dataMock });
+    sinon.stub(services, 'findAll').resolves(dataMock);
 
     await controllers.findAll(req, res);
 
-    expect(res.status).to.have.been.calledWith(200);
-    expect(res.json).to.have.been.calledWith(dataMock);
+    sinon.assert.calledWith(res.status, 200);
+    sinon.assert.calledWith(res.json, dataMock);
   });
 
   it('Testa se é possível buscar produto pelo id', async () => {
     const res = {};
-    const req = { params: { id: 1 } };
+    const req = { params: 1 };
 
     res.status = sinon.stub().returns(res);
     res.json = sinon.stub().returns();
@@ -38,22 +31,23 @@ describe('Testa 5% da camada de aplicação', () => {
 
     await controllers.findById(req, res);
 
-    expect(res.status).to.have.been.calledWith(200);
-    expect(res.json).to.have.been.calledWith(dataMockId);
+    sinon.assert.calledWith(res.status, 200);
+    sinon.assert.calledWith(res.json, dataMockId);
   });
 
   it('Testa busca de um id inválido', async () => {
     const res = {};
-    const req = { params: { id: 666 } };
+    const req = { params: 666 };
 
     res.status = sinon.stub().returns(res);
     res.json = sinon.stub().returns();
 
-    sinon.stub(services, 'findById').resolves({ type: 'NOT FOUND', message: 'Product not found' });
+    sinon.stub(services, 'findById').resolves({ type: 'INVALID_ID', message: 'Product not found' });
 
     await controllers.findById(req, res);
 
-    expect(res.status).to.have.been.calledWith(404);
-    expect(res.json).to.have.been.calledWith({ message: 'Product not found' });
+    sinon.assert.calledWith(res.status, 404);
+    sinon.assert.calledWith(res.json, { message: 'Product not found' });
   });
+  afterEach(sinon.restore);
 });
