@@ -1,4 +1,5 @@
 const models = require('../models');
+const validations = require('../middlewares/validations');
 
 async function findAll() {
   const data = await models.products.findAll();
@@ -13,6 +14,11 @@ async function findById(id) {
 }
 
 async function newProduct(name) {
+  const validationName = validations.nameValidation(name);
+  
+  if (validationName.type) {
+    return validationName;
+  }
   const data = await models.products.newProduct(name);
 
   return data;

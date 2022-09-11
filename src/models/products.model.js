@@ -14,7 +14,7 @@ async function findById(id) {
 
 async function newProduct(name) {
   const [data] = await connection
-    .execute('INSERT INTO StoraManager.products (name) VALUES(?)', [name]);
+    .execute('INSERT INTO StoreManager.products (name) VALUES(?)', [name]);
 
   return { id: data.insertId, name };
 }
