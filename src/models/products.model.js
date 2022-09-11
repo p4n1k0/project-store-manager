@@ -12,7 +12,15 @@ async function findById(id) {
   return data[0];
 }
 
+async function newProduct(name) {
+  const [data] = await connection
+    .execute('INSERT INTO StoraManager.products (name) VALUES(?)', [name]);
+
+  return { id: data.insertId, name };
+}
+
 module.exports = {
   findAll,
   findById,
+  newProduct,
 };
