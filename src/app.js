@@ -5,6 +5,7 @@ const app = express();
 app.use(express.json());
 
 app.use('/products', router.products);
+app.use('/sales', router.sales);
 
 // não remova esse endpoint, é para o avaliador funcionar
 app.get('/', (_request, response) => {
