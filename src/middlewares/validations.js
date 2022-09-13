@@ -50,21 +50,16 @@ function productsValidation(products) {
   return { type: null, message: 'ok' };
 }
 
-// function saleNewValidation(salesArray) {
-//   const { err } = arraySales.validate(salesArray);
-
-//   if (err) {
-//     if (err.message.includes('must be greater than or equal to 1')) {
-//       return { type: 422, message: err.message.replace('[0].', '') };
-//     }
-//     return { type: 400, message: err.message.replace('[0].', '') };
-//   }
-//   return { type: null };
-// }
+function saleValidation(sale) {
+  if (sale) {
+    return { type: null, message: 'ok' };
+  }
+  return { type: 404, message: 'Sale not found' };
+}
 
 module.exports = {
   nameValidation,
-  // saleNewValidation,
+  saleValidation,
   productValidation,
   productsValidation,
   salesValidation,

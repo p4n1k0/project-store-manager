@@ -24,6 +24,32 @@ async function newSale(sales) {
   return result;
 }
 
+async function findAll() {
+  const data = await models.sales.findAll();
+
+  return data;
+}
+
+async function findById(id) {
+  const data = await models.sales.findSaleById(id);
+  const validated = validations.salesValidation(data);
+
+  if (validated.type) {
+    return validated;
+  }
+  const dataSales = await models.sales.findProductSaleById(id);
+  const saleMap = dataSales.map((sale) => {
+    const productId = sale.product_id;
+    const { quantity } = sale;
+    const { date } = sale;
+
+    return { productId, quantity, date };
+  });
+  return saleMap;
+}
+
 module.exports = {
   newSale,
+  findAll,
+  findById,
 };

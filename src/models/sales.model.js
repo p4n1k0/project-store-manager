@@ -17,6 +17,40 @@ async function newSale(sales) {
   return result;
 }
 
+async function findSaleById(id) {
+  const [data] = await connection.execute('SELECT * FROM StoreManager.sales WHERE id = ?', [id]);
+
+  return data[0];
+}
+
+async function findProductSaleById(id) {
+  const [data] = await connection
+    .execute('SELECT * FROM StoreManager.sales_products WHERE sale_id = ?', [id]);
+  
+  return data;
+}
+
+async function findAll() {
+  const [data] = await connection
+    .execute('SELECT * FROM StoreManager.sales_products ORDER BY sale_id');
+  
+  const [dataSales] = await connection
+    .execute('SELECT * FROM StoreManager.sales_products ORDER BY sale_id');
+  
+  const saleMap = dataSales.map((sale) => {
+    const saleId = sale.sale_id;
+    const productId = sale.product_id;
+    const { quantity } = sale;
+    const { date } = data[saleId - 1];
+
+    return { saleId, productId, quantity, date };
+  });
+  return saleMap;
+}
+
 module.exports = {
   newSale,
+  findSaleById,
+  findProductSaleById,
+  findAll,
 };
