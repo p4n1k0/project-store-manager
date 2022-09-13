@@ -7,9 +7,14 @@ async function findAll() {
 }
 
 async function findById(id) {
-  const [data] = await connection.execute('SELECT * FROM StoreManager.products WHERE id = ?', [id]);
-
-  return data[0];
+  try {
+    const [data] = await connection
+      .execute('SELECT * FROM StoreManager.products WHERE id = ?', [id]);
+    
+    return data[0];
+  } catch (err) {
+    console.log(err);
+  }
 }
 
 async function newProduct(name) {
@@ -43,7 +48,7 @@ async function updateProducts(id, name) {
 async function deleteProduct(id) {
   try {
     const [data] = await connection
-      .execute('DELETE FROM StoreManager.products WHERE id=?  ORDER BY id', [id]);
+      .execute('DELETE FROM StoreManager.products WHERE id = ?  ORDER BY id', [id]);
     
     return data;
   } catch (err) {

@@ -42,16 +42,20 @@ async function updateProducts(id, name) {
   return dataUpdate;
 }
 
-async function deleteProduct(id) {
+async function deleteProduct(id, name) {
+  let validated = validations.nameValidation(name);
+
+  if (validated.type) {
+    return validated;
+  }
   const data = await models.products.findById(id);
+
+  validated = validations.productValidation(data);
 
   if (data.length === 0) {
     return { type: 404, message: 'Product not found' };
   }
-
-  const dataDeleted = await models.products.deleteProduct(id);
-
-  return { type: null, message: dataDeleted };
+  return { type: null };
 }
 
 module.exports = {
