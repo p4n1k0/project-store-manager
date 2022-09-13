@@ -32,7 +32,7 @@ async function findAll() {
 
 async function findById(id) {
   const data = await models.sales.findSaleById(id);
-  const validated = validations.salesValidation(data);
+  const validated = validations.saleValidation(data);
 
   if (validated.type) {
     return validated;
