@@ -45,9 +45,9 @@ async function updateProducts(id, name) {
   return { id: data.insertId, name };
 }
 
-async function deleteProduct(id) {
+async function deleteProductById(id) {
   try {
-    const [data] = await connection
+    const [{ data }] = await connection
       .execute('DELETE FROM StoreManager.products WHERE id = ?  ORDER BY id', [id]);
     
     return data;
@@ -62,5 +62,5 @@ module.exports = {
   newProduct,
   findAllProductsById,
   updateProducts,
-  deleteProduct,
+  deleteProductById,
 };

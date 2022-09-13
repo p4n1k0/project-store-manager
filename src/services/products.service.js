@@ -2,15 +2,11 @@ const models = require('../models');
 const validations = require('../middlewares/validations');
 
 async function findAll() {
-  const data = await models.products.findAll();
-
-  return data;
+  await models.products.findAll();
 }
 
 async function findById(id) {
-  const data = await models.products.findById(id);
-
-  return data;
+  await models.products.findById(id);  
 }
 
 async function newProduct(name) {
@@ -42,20 +38,8 @@ async function updateProducts(id, name) {
   return dataUpdate;
 }
 
-async function deleteProduct(id, name) {
-  let validated = validations.nameValidation(name);
-
-  if (validated.type) {
-    return validated;
-  }
-  const data = await models.products.findById(id);
-
-  validated = validations.productValidation(data);
-
-  if (data.length === 0) {
-    return { type: 404, message: 'Product not found' };
-  }
-  return { type: null };
+async function deleteProductById(id) {  
+  await models.products.deleteProductById(id);
 }
 
 module.exports = {
@@ -63,5 +47,5 @@ module.exports = {
   findById,
   newProduct,
   updateProducts,
-  deleteProduct,
+  deleteProductById,
 };
