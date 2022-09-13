@@ -2,11 +2,15 @@ const models = require('../models');
 const validations = require('../middlewares/validations');
 
 async function findAll() {
-  await models.products.findAll();
+  const data = await models.products.findAll();
+
+  return data;
 }
 
 async function findById(id) {
-  await models.products.findById(id);  
+  const data = await models.products.findById(id);
+
+  return data;
 }
 
 async function newProduct(name) {
@@ -39,7 +43,9 @@ async function updateProducts(id, name) {
 }
 
 async function deleteProductById(id) {  
-  await models.products.deleteProductById(id);
+  const data = models.products.deleteProductById(id);
+
+  return { type: null, message: data };
 }
 
 module.exports = {

@@ -41,9 +41,15 @@ async function updateProducts(req, res) {
 }
 
 async function deleteProductById(req, res) {
-  await services.products.deleteProductById(req.params.id);
+  const { id } = req.params;
+  const data = await services.products.findById(id);
 
-  return res.status(204).end();
+  if (!data) {
+    return res.status(404).json({ message: 'Product not found' });
+  }
+   const dataDeleted = await services.products.deleteProductById(id);
+
+  return res.status(204).json(dataDeleted);
 }
 
 module.exports = {
