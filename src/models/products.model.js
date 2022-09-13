@@ -19,8 +19,23 @@ async function newProduct(name) {
   return { id: data.insertId, name };
 }
 
+async function findAllProductsById(ids) {
+  const query = ids.split(',');
+  const queryIn = ids.split(',').map((_product) => '?').join(',');
+
+  try {
+    const [data] = await connection
+      .execute(`SELECT * FROM StoreManager.products WHERE id IN (${queryIn}})`, [...query]);
+
+    return data;
+  } catch (err) {
+    console.log(err);
+  }
+}
+
 module.exports = {
   findAll,
   findById,
   newProduct,
+  findAllProductsById,
 };

@@ -1,20 +1,19 @@
 const connection = require('./connection');
 
-async function newSale(sale) {
-  const [data] = await connection.execute('INSERT INTO StorageManager.sales (date) VALUES (NOW())');
-
+async function newSale(sales) {
+  const [data] = await connection.execute('INSERT INTO StoreManager.sales (date) VALUES (NOW())');
   const saleId = data.insertId;
 
-  let saleMap = sale.map((product) => [saleId, product.productId, product.quantity]);
-  saleMap = saleMap.map((saleValue) => saleValue.join(','));
+  let saleMap = sales.map((sale) => [saleId, sale.productId, sale.quantity]); 
+  saleMap = saleMap.map((product) => product.join(','));
   saleMap = saleMap.join('), (');
   saleMap = `(${saleMap})`;
 
   await connection.execute(
-    `INSERT INTO StorageManager.sales_products (sale_id, product_id, quantity) VALUES ${saleMap}`,
+    `INSERT INTO StoreManager.sales_products (sale_id, product_id, quantity) VALUES ${saleMap}`,
   );
-  const result = { id: saleId, items: sale };
-  
+  const result = { id: saleId, itemsSold: sales };
+
   return result;
 }
 

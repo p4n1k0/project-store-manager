@@ -1,16 +1,14 @@
 const services = require('../services');
 
 async function newSale(req, res) {
-  const saleData = req.body;
-  const data = await services.sales.newSale(saleData);
+  const data = await services.sales.newSale(req.body);
 
   if (data.type) {
-    res.status(data.type).json({ message: data.message });
-  } else {
-    res.status(201).json(data);
+    return res.status(data.type).json({ message: data.message });
   }
+  res.status(201).json(data);
 }
 
-module.exports = {
-  newSale,
+  module.exports = {
+    newSale,
 };

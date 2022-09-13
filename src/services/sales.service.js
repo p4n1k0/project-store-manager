@@ -1,24 +1,27 @@
 const models = require('../models');
 const validations = require('../middlewares/validations');
 
-async function newSale(sale) {
-  let result = validations.saleValidation(sale);
+async function newSale(sales) {
+  let validated = validations.salesValidation(sales);
 
-  if (result.type) {
-    return result;
+  if (validated.type) {
+    return validated;
   }
 
-  const products = [];
-  sale.forEach(async (product) => {
-    const p = await models.products.findById(product.productId);
-    
-    products.push(p);
-  });
-  result = validations.productsValidation(products);
+  const products = await Promise.all(sales.map(async (sale) => {
+    const data = await models.products.findById(sale.productId);
 
-  if (result.type) {
-    return result;
+    return data;
+  }));
+
+  validated = validations.productsValidation(products);
+  
+  if (validated.type) {
+    return validated;
   }
+  const result = await models.sales.newSale(sales);
+
+  return result;
 }
 
 module.exports = {
