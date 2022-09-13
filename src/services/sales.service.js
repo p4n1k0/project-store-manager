@@ -37,11 +37,12 @@ async function findById(id) {
   if (validated.type) {
     return validated;
   }
+
   const dataSales = await models.sales.findProductSaleById(id);
-  const saleMap = dataSales.map((sale) => {
-    const productId = sale.product_id;
-    const { quantity } = sale;
-    const { date } = sale;
+  const saleMap = dataSales.map((sales) => {
+    const productId = sales.product_id;
+    const { quantity } = sales;
+    const { date } = data;
 
     return { productId, quantity, date };
   });

@@ -21,6 +21,8 @@ async function findById(req, res) {
 
   if (data.type) {
     res.status(data.type).json({ message: data.message });
+  } else {
+    res.status(200).json(data);
   }
 }
 

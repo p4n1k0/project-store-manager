@@ -32,7 +32,7 @@ async function findProductSaleById(id) {
 
 async function findAll() {
   const [data] = await connection
-    .execute('SELECT * FROM StoreManager.sales_products ORDER BY sale_id');
+    .execute('SELECT * FROM StoreManager.sales ORDER BY id');
   
   const [dataSales] = await connection
     .execute('SELECT * FROM StoreManager.sales_products ORDER BY sale_id');

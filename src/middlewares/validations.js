@@ -9,7 +9,7 @@ function nameValidation(name) {
 }
 
 function salesValidation(sales) {
-  const saleMap = sales.map((sale) => {
+  const salesMap = sales.map((sale) => {
     const { productId, quantity } = sale;
 
     if (!productId) {
@@ -26,7 +26,7 @@ function salesValidation(sales) {
 
     return { type: null, message: 'ok' };
   });
-  return saleMap[0];
+  return salesMap[0];
 }
 
 function productValidation(product) {
