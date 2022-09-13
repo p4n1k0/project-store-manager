@@ -40,9 +40,20 @@ async function updateProducts(req, res) {
   }
 }
 
+async function deleteProduct(req, res) {
+  const { id } = req.params;
+  const data = await services.products.deleteProduct(id);
+
+  if (data.type) {
+    return res.status(data.type).json({ message: data.message });    
+  }
+  res.status(204);
+}
+
 module.exports = {
   findAll,
   findById,
   newProduct,
   updateProducts,
+  deleteProduct,
 };
