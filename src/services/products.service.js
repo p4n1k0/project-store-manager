@@ -24,8 +24,27 @@ async function newProduct(name) {
   return data;
 }
 
+async function updateProducts(id, name) {
+  let validated = validations.nameValidation(name);
+
+  if (validated.type) {
+    return validated;
+  }
+  const data = await models.products.findById(id);
+
+  validated = validations.productValidation(data);
+
+  if (validated.type) {
+    return validated;
+  }
+  const dataUpdate = await models.products.updateProducts(id, name);
+
+  return dataUpdate;
+}
+
 module.exports = {
   findAll,
   findById,
   newProduct,
+  updateProducts,
 };

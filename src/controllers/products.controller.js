@@ -28,8 +28,21 @@ async function newProduct(req, res) {
   }
 }
 
+async function updateProducts(req, res) {
+  const { id } = req.params;
+  const { name } = req.body;
+  const data = await services.products.updateProducts(id, name);
+
+  if (data.type) {
+    res.status(data.type).json({ message: data.message });
+  } else {
+    res.status(200).json(data);
+  }
+}
+
 module.exports = {
   findAll,
   findById,
   newProduct,
+  updateProducts,
 };
