@@ -46,10 +46,10 @@ async function updateProducts(id, name) {
 }
 
 async function deleteProductById(id) {
-  await connection
+  const [{ data }] = await connection
     .execute('DELETE FROM StoreManager.products WHERE id = ?', [id]);
   
-  return null;  
+  return data;  
 }
 
 module.exports = {
