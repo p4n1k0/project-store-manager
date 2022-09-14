@@ -1,8 +1,13 @@
+const chai = require('chai');
 const sinon = require('sinon');
-const index = require('../../../src/controllers/index');
-const { dataMock, dataMockId } = require('./mocks/products.controller.mock');
-const { services } = require('../../../src/services/products.service');
-const { controllers } = require('../../../src/controllers/products.controller');
+const chaiHttp = require('chai-http');
+const { expect } = chai;
+
+chai.use(chaiHttp);
+
+const app = require('../../../src/app');
+const connection = require('../../../src/models/connection');
+const { dataMock, dataMockId } = require('../models/mocks/products.model.mock');
 
 describe('Testa camada controller da aplicação', () => {
   it('Testa se todos os produtos estão na lista', async () => {
