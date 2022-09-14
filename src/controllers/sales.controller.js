@@ -46,10 +46,10 @@ async function deleteSales(req, res) {
   res.status(204).end();
 }
 
-  module.exports = {
-    newSale,
-    findAll,
-    findById,
-    deleteSales,
-    findSaleById,
+module.exports = {
+  newSale,
+  findAll,
+  findById,
+  deleteSales,
+  findSaleById,
 };

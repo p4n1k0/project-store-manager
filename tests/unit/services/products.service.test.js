@@ -58,7 +58,7 @@ describe('Testa se é possivel atualizar produto', () => {
 
     expect(data).to.deep.equal({ type: 422, message: '"name" length must be at least 5 characters long' });
   });
-  
+
   it('Testa se há algum nome', async () => {
     const id = 1;
     const name = undefined;

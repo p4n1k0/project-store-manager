@@ -10,7 +10,7 @@ async function findById(id) {
   try {
     const [data] = await connection
       .execute('SELECT * FROM StoreManager.products WHERE id = ?', [id]);
-    
+
     return data[0];
   } catch (err) {
     console.log(err);
@@ -48,8 +48,8 @@ async function updateProducts(id, name) {
 async function deleteProductById(id) {
   const [{ data }] = await connection
     .execute('DELETE FROM StoreManager.products WHERE id = ?', [id]);
-  
-  return data;  
+
+  return data;
 }
 
 module.exports = {
