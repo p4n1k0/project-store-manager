@@ -26,14 +26,26 @@ async function findById(req, res) {
   }
 }
 
+async function findSaleById(req, res) {
+  const { id } = req.params;
+  const { type, message } = await services.sales.findSaleById(Number(id));
+
+  if (type) {
+    return res.status(404).json({ message });
+  }
+
+  res.status(200).json(message);
+}
+
 async function deleteSales(req, res) {
   const { id } = req.params;
-  const data = await services.sales.deleteSales(id);
+  const { type, message } = await services.sales.deleteSales(Number(id));
 
-  if (data.type) {
-    return res.status(data.type).json({ message: data.message });
-  } 
-  res.status(204).end();
+  if (type) {
+    return res.status(404).json({ message });
+  }
+
+  res.sendStatus(204);
 }
 
   module.exports = {
@@ -41,4 +53,5 @@ async function deleteSales(req, res) {
     findAll,
     findById,
     deleteSales,
+    findSaleById,
 };

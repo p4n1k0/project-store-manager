@@ -49,10 +49,23 @@ async function findById(id) {
   return saleMap;
 }
 
-async function deleteSales(id) {
-  const data = models.sales.deleteSales(id);
+async function findSaleById(id) {
+  const data = await models.sales.findSaleById(id);
 
+  if (!data) {
+    return { type: 'NOT_FOUND', message: 'Sale not found' };
+  }
   return { type: null, message: data };
+}
+
+async function deleteSales(id) {
+  const data = await models.sales.findSaleById(id);
+  
+  if (!data) {
+    return { type: 'NOT_FOUND', message: 'Sale not found' };
+  }
+  await models.sales.deleteSales(id);
+  return { type: null };
 }
 
 module.exports = {
@@ -60,4 +73,5 @@ module.exports = {
   findAll,
   findById,
   deleteSales,
+  findSaleById,
 };
