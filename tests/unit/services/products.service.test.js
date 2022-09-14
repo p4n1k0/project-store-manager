@@ -2,7 +2,7 @@ const { expect } = require('chai');
 const sinon = require('sinon');
 const services = require('../../../src/services');
 const models = require('../../../src/models');
-const { dataMock } = require('../mocks/products.model.mock')
+const { dataMock, dataMockId } = require('../mocks/products.model.mock')
 
 describe('Testa da camada service de productos', () => {
   it('Testa se é possível buscar todos os produtos', async () => {
@@ -19,7 +19,7 @@ describe('Testa da camada service de productos', () => {
     const id = 1;
     const data = await services.products.findById(id);
 
-    expect(data).to.deep.equal(data[0]);
+    expect(data).to.deep.equal(dataMockId[0]);
   });
 
   it('Testa se falha ao cadastrar nome com menos de 5 caracteres', async () => {
