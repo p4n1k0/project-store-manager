@@ -43,7 +43,7 @@ async function updateProducts(id, name) {
 }
 
 async function deleteProductById(id) {  
-  const data = models.products.deleteProductById(id);
+  const data = await models.products.deleteProductById(id);
 
   return { type: null, message: data };
 }

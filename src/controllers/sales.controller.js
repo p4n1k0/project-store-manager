@@ -33,7 +33,6 @@ async function findSaleById(req, res) {
   if (type) {
     return res.status(404).json({ message });
   }
-
   res.status(200).json(message);
 }
 
@@ -44,8 +43,7 @@ async function deleteSales(req, res) {
   if (type) {
     return res.status(404).json({ message });
   }
-
-  res.sendStatus(204);
+  res.status(204).end();
 }
 
   module.exports = {
