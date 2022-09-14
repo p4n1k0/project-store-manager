@@ -47,7 +47,7 @@ async function deleteProductById(req, res) {
   if (!data) {
     return res.status(404).json({ message: 'Product not found' });
   }
-   const dataDeleted = await services.products.deleteProductById(id);
+  const dataDeleted = await services.products.deleteProductById(id);
 
   return res.status(204).json(dataDeleted);
 }

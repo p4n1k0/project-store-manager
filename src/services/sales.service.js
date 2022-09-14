@@ -15,7 +15,7 @@ async function newSale(sales) {
   }));
 
   validated = validations.productsValidation(products);
-  
+
   if (validated.type) {
     return validated;
   }
@@ -60,7 +60,7 @@ async function findSaleById(id) {
 
 async function deleteSales(id) {
   const data = await models.sales.findSaleById(id);
-  
+
   if (!data) {
     return { type: 'NOT_FOUND', message: 'Sale not found' };
   }

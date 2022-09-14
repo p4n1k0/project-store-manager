@@ -15,7 +15,7 @@ async function findById(id) {
 
 async function newProduct(name) {
   const validationName = validations.nameValidation(name);
-  
+
   if (validationName.type) {
     return validationName;
   }
@@ -42,7 +42,7 @@ async function updateProducts(id, name) {
   return dataUpdate;
 }
 
-async function deleteProductById(id) {  
+async function deleteProductById(id) {
   const data = await models.products.deleteProductById(id);
 
   return { type: null, message: data };

@@ -4,7 +4,7 @@ async function newSale(sales) {
   const [data] = await connection.execute('INSERT INTO StoreManager.sales (date) VALUES (NOW())');
   const saleId = data.insertId;
 
-  let saleMap = sales.map((sale) => [saleId, sale.productId, sale.quantity]); 
+  let saleMap = sales.map((sale) => [saleId, sale.productId, sale.quantity]);
   saleMap = saleMap.map((product) => product.join(','));
   saleMap = saleMap.join('), (');
   saleMap = `(${saleMap})`;
@@ -26,17 +26,17 @@ async function findSaleById(id) {
 async function findProductSaleById(id) {
   const [data] = await connection
     .execute('SELECT * FROM StoreManager.sales_products WHERE sale_id = ?', [id]);
-  
+
   return data;
 }
 
 async function findAll() {
   const [data] = await connection
     .execute('SELECT * FROM StoreManager.sales ORDER BY id');
-  
+
   const [dataSales] = await connection
     .execute('SELECT * FROM StoreManager.sales_products ORDER BY sale_id');
-  
+
   const saleMap = dataSales.map((sale) => {
     const saleId = sale.sale_id;
     const productId = sale.product_id;
