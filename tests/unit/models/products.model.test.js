@@ -1,7 +1,7 @@
 const { expect } = require('chai');
 const sinon = require('sinon');
 const models = require('../../../src/models');
-const { dataMock, dataMockId } = require('./mocks/products.model.mock');
+const { dataMock, dataMockId } = require('./../mocks/products.model.mock');
 const connection = require('../../../src/models/connection');
 
 describe('Testa camada model de produtod', () => {

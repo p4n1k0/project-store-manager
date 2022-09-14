@@ -7,52 +7,49 @@ chai.use(chaiHttp);
 
 const app = require('../../../src/app');
 const connection = require('../../../src/models/connection');
-const { dataMock, dataMockId } = require('../models/mocks/products.model.mock');
+const { dataMock } = require('../mocks/products.model.mock');
 
 describe('Testa camada controller da aplicação', () => {
   it('Testa se todos os produtos estão na lista', async () => {
-    const res = {};
-    const req = {};
+    sinon.stub(connection, 'execute').onFirstCall().resolves([[dataMock]]);
 
-    res.status = sinon.stub().returns(res);
-    res.json = sinon.stub().returns();
+    const data = await chai.request(app).get('/products').send();
 
-    sinon.stub(services, 'findAll').resolves(dataMock);
-
-    await controllers.findAll(req, res);
-
-    sinon.assert.calledWith(res.status, 200);
-    sinon.assert.calledWith(res.json, dataMock);
+    expect(data.status).to.be.equal(200);
   });
 
   it('Testa se é possível buscar produto pelo id', async () => {
-    const res = {};
-    const req = { params: 1 };
+    sinon.stub(connection, 'execute').onFirstCall().resolves([[dataMock[0]]]);
 
-    res.status = sinon.stub().returns(res);
-    res.json = sinon.stub().returns();
+    const data = await chai.request(app).get('/products/1').send();
 
-    sinon.stub(services, 'findById').resolves({ type: null, messsage: dataMockId });
-
-    await controllers.findById(req, res);
-
-    sinon.assert.calledWith(res.status, 200);
-    sinon.assert.calledWith(res.json, dataMockId);
+    expect(data.status).to.be.equal(200);
   });
 
   it('Testa busca de um id inválido', async () => {
-    const res = {};
-    const req = { params: 666 };
+    sinon.stub(connection, 'execute').onFirstCall().resolves([dataMock[0]]).onSecondCall().resolves([dataMock]);
 
-    res.status = sinon.stub().returns(res);
-    res.json = sinon.stub().returns();
+    const data = await chai.request(app).get('/products/666').send();
 
-    sinon.stub(services, 'findById').resolves({ type: 'INVALID_ID', message: 'Product not found' });
+    expect(data.status).to.be.equal(404);
+  });
 
-    await controllers.findById(req, res);
+  it('Testa tamanho de caracteres do nome do produto', async () => {
+    sinon.stub(connection, 'execute').onFirstCall().resolves([{ id: 4, name: 'test04' }]);
 
-    sinon.assert.calledWith(res.status, 404);
-    sinon.assert.calledWith(res.json, { message: 'Product not found' });
+    const data = await chai.request(app).post('/products').send({ name: 'test' });
+
+    expect(data.status).to.be.equal(422);
+    expect(data.body).to.be.deep.equal({ message: '"name" length must be at least 5 characters long' });
+  });
+
+  it('Testa se é possível adicionar um produto', async () => {
+    sinon.stub(connection, 'execute').onFirstCall().resolves([{ id: 4, name: 'test04' }]);
+
+    const data = await chai.request(app).post('/products').send({ name: 'test04' });
+
+    expect(data.status).to.be.equal(201);
+    expect(data.body).to.be.deep.equal({ name: 'test04' });
   });
   afterEach(sinon.restore);
 });

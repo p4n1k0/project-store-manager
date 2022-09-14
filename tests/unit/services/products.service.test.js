@@ -2,7 +2,7 @@ const { expect } = require('chai');
 const sinon = require('sinon');
 const services = require('../../../src/services');
 const models = require('../../../src/models');
-const { dataMock, dataMockId } = require('../models/mocks/products.model.mock');
+const { dataMock } = require('../mocks/products.model.mock')
 
 describe('Testa da camada service de productos', () => {
   it('Testa se é possível buscar todos os produtos', async () => {
