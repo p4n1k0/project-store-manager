@@ -26,8 +26,19 @@ async function findById(req, res) {
   }
 }
 
+async function deleteSales(req, res) {
+  const { id } = req.params;
+  const data = await services.sales.deleteSales(id);
+
+  if (data.type) {
+    return res.status(data.type).json({ message: data.message });
+  } 
+  res.status(204).end();
+}
+
   module.exports = {
     newSale,
     findAll,
     findById,
+    deleteSales,
 };

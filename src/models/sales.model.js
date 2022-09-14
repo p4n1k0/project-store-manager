@@ -48,9 +48,16 @@ async function findAll() {
   return saleMap;
 }
 
+async function deleteSales(id) {
+  const [data] = await connection.execute('DELETE FROM StoreManager.sales WHERE id = ?', [id]);
+
+  return data;
+}
+
 module.exports = {
   newSale,
   findSaleById,
   findProductSaleById,
   findAll,
+  deleteSales,
 };

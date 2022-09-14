@@ -49,8 +49,15 @@ async function findById(id) {
   return saleMap;
 }
 
+async function deleteSales(id) {
+  const data = models.sales.deleteSales(id);
+
+  return { type: null, message: data };
+}
+
 module.exports = {
   newSale,
   findAll,
   findById,
+  deleteSales,
 };
