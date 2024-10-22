@@ -3,7 +3,7 @@
 Aqui você vai encontrar os detalhes de como foi estruturar o desenvolvimento do meu projeto a partir deste repositório.
 
 <details>
-  <summary><strong>👨‍💻 O que deverá ser desenvolvido</strong></summary>
+  <summary><strong>👨‍💻 O que foi desenvolvido</strong></summary>
 
   Desenvolvi minha primeira API utilizando a arquitetura MSC (model-service-controller)!
 
@@ -66,7 +66,6 @@ Aqui você vai encontrar os detalhes de como foi estruturar o desenvolvimento do
 </details>
 
 <details>
-  <summary><strong>‼️ Antes de começar a desenvolver</strong></summary>
 
   1. Clone o repositório
 
@@ -81,55 +80,6 @@ Aqui você vai encontrar os detalhes de como foi estruturar o desenvolvimento do
 
   #### :warning: ATENÇÃO: Não rode o comando `npm audit fix`! *Ele atualiza várias dependências do projeto, e essa atualização gera conflitos com o avaliador.*
 
-
-  3. Crie uma branch a partir da branch `master`
-
-  - Verifique que você está na branch `master`
-    - Exemplo: `git branch`
-  - Se não estiver, mude para a branch `master`
-    - Exemplo: `git checkout master`
-  - Agora crie uma branch à qual você vai submeter os `commits` do seu projeto
-    - Você deve criar uma branch no seguinte formato: `nome-de-usuario-nome-do-projeto`
-    - Exemplo: `git checkout -b joaozinho-sd-020-a-store-manager`
-
-  4. Adicione as mudanças ao _stage_ do Git e faça um `commit`
-
-  - Verifique que as mudanças ainda não estão no _stage_
-    - Exemplo: `git status` (deve aparecer listada a pasta _joaozinho_ em vermelho)
-  - Adicione o novo arquivo ao _stage_ do Git
-    - Exemplo:
-      - `git add .` (adicionando todas as mudanças - _que estavam em vermelho_ - ao stage do Git)
-      - `git status` (deve aparecer listado o arquivo _joaozinho/README.md_ em verde)
-  - Faça o `commit` inicial
-    - Exemplo:
-      - `git commit -m 'iniciando o projeto x'` (fazendo o primeiro commit)
-      - `git status` (deve aparecer uma mensagem tipo _nothing to commit_ )
-
-  5. Adicione a sua branch com o novo `commit` ao repositório remoto
-
-  - Usando o exemplo anterior: `git push -u origin joaozinho-sd-020-a-store-manager`
-
-  <br />
-</details>
-
-<details>
-  <summary><strong>⌨️ Durante o desenvolvimento</strong></summary>
-
-  #### :warning: PULL REQUESTS COM ISSUES NO LINTER NÃO SERÃO AVALIADAS, ATENTE-SE PARA RESOLVÊ-LAS ANTES DE FINALIZAR O DESENVOLVIMENTO!
-
-  * Faça `commits` das alterações que você fizer no código regularmente
-
-  * Lembre-se de sempre após um (ou alguns) `commits` atualizar o repositório remoto
-
-  * Os comandos que você utilizará com mais frequência são:
-    1. `git status` _(para verificar o que está em vermelho - fora do stage - e o que está em verde - no stage)_
-    2. `git add` _(para adicionar arquivos ao stage do Git)_
-    3. `git commit` _(para criar um commit com os arquivos que estão no stage do Git)_
-    5. `git push -u nome-da-branch` _(para enviar o commit para o repositório remoto na primeira vez que fizer o `push` de uma nova branch)_
-    4. `git push` _(para enviar o commit para o repositório remoto após o passo anterior)_
-
-  <br />
-</details>
 
 <details>
   <summary><strong>🛠 Execução de testes localmente</strong></summary>
@@ -265,7 +215,7 @@ Aqui você vai encontrar os detalhes de como foi estruturar o desenvolvimento do
 </details>
 
 <details>
-  <summary id="dicas"><strong>👀 Dicas</strong></summary>
+  <summary id="dicas"><strong>👀 Dicas usadas</strong></summary>
 
   - Para gerar os objetos de erro personalizados, você pode utilizar uma biblioteca de erros, como o [`boom`](https://www.npmjs.com/package/@hapi/boom) ou [`restify-errors`](https://www.npmjs.com/package/restify-errors);
 
@@ -315,11 +265,7 @@ Aqui você vai encontrar os detalhes de como foi estruturar o desenvolvimento do
 
   ![Tabela Vendas-Produtos](./public/tablesalesproducts.png)
 
-  > :warning:️ Em caso de dúvidas, consulte os conteúdos:
-  > - [Arquitetura de Software - Camada de Model](https://app.betrybe.com/course/back-end/nodejs-camada-de-servico-e-arquitetura-rest-e-restful/arquitetura-de-software-camada-de-model/69147096-f19d-4ab4-a839-906359d79172/o-que-vamos-aprender/989bb9ca-4adb-4b12-a26e-4f74c26c2e90?use_case=calendar)
-  > - [Arquitetura de Software - Camada de Controller e Service](https://app.betrybe.com/course/back-end/nodejs-camada-de-servico-e-arquitetura-rest-e-restful/arquitetura-de-software-camada-de-controller-e-service/f8eeda7e-dd20-4a59-a0d9-3d4ec20729bc/o-que-vamos-aprender/af063606-77cb-4fbc-9c93-992662283b5a?use_case=side_bar)
-
-  ---
+   ---
 
   #### Dicas de scripts prontos
 
@@ -366,9 +312,9 @@ Aqui você vai encontrar os detalhes de como foi estruturar o desenvolvimento do
 <details id="para-escrever-seus-própios-arquivos-de-teste">
   <summary><strong>🔬 Escrevendo testes de unidade</strong></summary><br />
 
-  - Utilize o **mocha**, **chai** e **sinon** para escrever seus testes;
-  - Coloque todos os testes de `models`, `services` e `controllers` dentro da pasta `tests/unit`.
-  - **:warning: Atenção:** Os nomes dos arquivos de testes devem seguir essa estrutura `nomeDoArquivo.test.js`
+  - Usei o **mocha**, **chai** e **sinon** para escrever meus testes;
+  - Coloquei todos os testes de `models`, `services` e `controllers` dentro da pasta `tests/unit`.
+  - **:warning: Atenção:** Os nomes dos arquivos de testes seguiram essa estrutura `nomeDoArquivo.test.js`
   - **✨ Dica:** Aqui uma sugestão de arquivos para criar os teste de unidade:
   ```tree
   .
