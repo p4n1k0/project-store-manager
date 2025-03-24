@@ -48,9 +48,22 @@ async function updateProducts(id, name) {
 async function deleteProductById(id) {
   const [{ data }] = await connection
     .execute('DELETE FROM StoreManager.products WHERE id = ?', [id]);
-
   return data;
-}
+};
+
+async function getBySearchTerm(query) {
+  if (query.length === 0) {
+    const [allProducts] = await connection.execute('SELECT * FROM StoreManager.products');
+    return allProducts;
+  };
+
+  const [products] = await connection.execute(
+    `SELECT * FROM StoreManager.products
+    WHERE name LIKE '%${query}%'`,
+  );
+  return products;
+};
+
 
 module.exports = {
   findAll,
@@ -59,4 +72,5 @@ module.exports = {
   findAllProductsById,
   updateProducts,
   deleteProductById,
+  getBySearchTerm,
 };

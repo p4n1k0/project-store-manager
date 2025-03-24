@@ -21,6 +21,14 @@ describe('Testa camada model de produtos', () => {
     expect(data).to.deep.equal(dataMockId[0]);
   });
 
+  it('Testa retorno vazio se id não existe', async () => {
+    sinon.stub(connection, 'execute').resolves([[dataMockId[7]]]);
+
+    const result = await models.products.findById();
+
+    expect(result).to.equal(dataMockId[7]);
+  });
+
   it('Testa se é possível inserir um novo produto', async () => {
     sinon.stub(connection, 'execute').resolves([{ insertId: 4 }]);
 

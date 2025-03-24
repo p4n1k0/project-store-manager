@@ -7,7 +7,7 @@ chai.use(chaiHttp);
 
 const app = require('../../../src/app');
 const connection = require('../../../src/models/connection');
-const { dataMock } = require('../mocks/products.model.mock');
+const { dataMock, dataMockId } = require('../mocks/products.model.mock');
 
 describe('Testa camada controller da aplicação', () => {
   it('Testa se todos os produtos estão na lista', async () => {
@@ -32,6 +32,15 @@ describe('Testa camada controller da aplicação', () => {
     const data = await chai.request(app).get('/products/666').send();
 
     expect(data.status).to.be.equal(404);
+  });
+
+  it('Testa se produto tem nome', async () => {
+    sinon.stub(connection, 'execute').onFirstCall().resolves([{ id: 4, name: 'test077' }]);
+
+    const data = await chai.request(app).post('/products').send({ name: '' });
+
+    expect(data.status).to.be.equal(400);
+    expect(data.body).to.be.deep.equal({ message: '"name" is required' });
   });
 
   it('Testa tamanho de caracteres do nome do produto', async () => {

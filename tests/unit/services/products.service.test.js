@@ -22,6 +22,16 @@ describe('Testa da camada service de productos', () => {
     expect(data).to.deep.equal(dataMockId[0]);
   });
 
+  it('Testa retorno de erro caso não exista o produto pelo id', async () => {
+    sinon.stub(models.products, 'findById').resolves([]);
+
+    try {
+      await services.products.findById(999);      
+    } catch (error) {
+      expect(error.message).to.equal('Product not found');      
+    }
+  });
+
   it('Testa se falha ao cadastrar nome com menos de 5 caracteres', async () => {
     const name = 'test'
     const data = await services.products.newProduct(name);

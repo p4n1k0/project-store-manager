@@ -1,6 +1,6 @@
 const services = require('../services');
 
-async function findAll(req, res) {
+async function findAll(_req, res) {
   const data = await services.products.findAll();
 
   res.status(200).json(data);
@@ -43,14 +43,16 @@ async function updateProducts(req, res) {
 async function deleteProductById(req, res) {
   const { id } = req.params;
   const data = await services.products.findById(id);
-
-  if (!data) {
-    return res.status(404).json({ message: 'Product not found' });
-  }
+  if (!data) return res.status(404).json({ message: 'Product not found' });
   const dataDeleted = await services.products.deleteProductById(id);
-
   return res.status(204).json(dataDeleted);
-}
+};
+
+async function getBySearchTerm(req, res) {
+  const { q } = req.query;
+  const product = await services.products.getBySearchTerm(q);
+  res.status(200).json(product);  
+};
 
 module.exports = {
   findAll,
@@ -58,4 +60,5 @@ module.exports = {
   newProduct,
   updateProducts,
   deleteProductById,
+  getBySearchTerm,
 };

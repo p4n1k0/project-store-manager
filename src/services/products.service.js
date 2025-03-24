@@ -44,9 +44,13 @@ async function updateProducts(id, name) {
 
 async function deleteProductById(id) {
   const data = await models.products.deleteProductById(id);
-
   return { type: null, message: data };
-}
+};
+
+async function getBySearchTerm(query) {
+  const product = models.products.getBySearchTerm(query);
+  return product;  
+};
 
 module.exports = {
   findAll,
@@ -54,4 +58,5 @@ module.exports = {
   newProduct,
   updateProducts,
   deleteProductById,
+  getBySearchTerm,
 };
