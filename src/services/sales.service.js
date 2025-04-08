@@ -1,6 +1,8 @@
 const models = require('../models');
 const validations = require('../middlewares/validations');
 
+const notFound = 'Sale not found';
+
 async function newSale(sales) {
   let validated = validations.salesValidation(sales);
   if (validated.type) return validated;
@@ -39,13 +41,13 @@ async function findById(id) {
 
 async function findSaleById(id) {
   const data = await models.sales.findSaleById(id);
-  if (!data) return { type: 'NOT_FOUND', message: 'Sale not found' };
+  if (!data) return { type: 'NOT_FOUND', message: notFound };
   return { type: null, message: data };
 };
 
 async function deleteSales(id) {
   const data = await models.sales.findSaleById(id);
-  if (!data) return { type: 'NOT_FOUND', message: 'Sale not found' };
+  if (!data) return { type: 'NOT_FOUND', message: notFound };
   await models.sales.deleteSales(id);
   return { type: null };
 };

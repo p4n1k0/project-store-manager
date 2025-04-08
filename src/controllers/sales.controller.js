@@ -14,7 +14,6 @@ async function findAll(_req, res) {
 async function findById(req, res) {
   const { id } = req.params;
   const data = await services.sales.findById(id);
-
   if (data.type) res.status(data.type).json({ message: data.message });
   else res.status(200).json(data);  
 };
@@ -33,7 +32,7 @@ async function deleteSales(req, res) {
   res.status(204).end();
 };
 
-const updateSale = async (req, res) => {
+async function updateSale(req, res) {
   const { id } = req.params;
   const saleUpdateArray = req.body;
   const sale = await services.sales.updateSale(id, saleUpdateArray);
