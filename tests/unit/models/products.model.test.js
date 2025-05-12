@@ -1,7 +1,7 @@
 const { expect } = require('chai');
 const sinon = require('sinon');
 const models = require('../../../src/models');
-const { dataMock, dataMockId } = require('../mocks/products.model.mock');
+const { dataMock } = require('../mocks/products.model.mock');
 const connection = require('../../../src/models/connection');
 
 describe('Testa camada model de produtos', () => {
@@ -10,23 +10,16 @@ describe('Testa camada model de produtos', () => {
 
     const data = await models.products.findAll();
 
-    expect(data).to.deep.equal(dataMockId);
+    expect(data).to.deep.eq(dataMock);
   });
+
 
   it('Testa se é possível buscar produto pelo id', async () => {
-    sinon.stub(connection, 'execute').resolves([[dataMockId[0]]]);
+    sinon.stub(connection, 'execute').resolves([[dataMock[0]]]);
 
-    const data = await models.products.findById();
+    const data = await models.products.findById(1);
 
-    expect(data).to.deep.equal(dataMockId[0]);
-  });
-
-  it('Testa retorno vazio se id não existe', async () => {
-    sinon.stub(connection, 'execute').resolves([[dataMockId[7]]]);
-
-    const result = await models.products.findById();
-
-    expect(result).to.equal(dataMockId[7]);
+    expect(data).to.deep.eq(dataMock[0]);
   });
 
   it('Testa se é possível inserir um novo produto', async () => {
@@ -34,13 +27,32 @@ describe('Testa camada model de produtos', () => {
 
     const data = await models.products.newProduct('name04');
 
-    expect(data).to.be.deep.equal({ id: 4, name: 'name04' });
+    expect(data).to.be.deep.eq({ id: 4, name: 'name04' });
   });
 
   it('Testa se é possível atualizar produto', async () => {
     sinon.stub(connection, 'execute').resolves([{ insertId: 2 }]);
 
-    const data = await models.products.updateProducts(3, 'nameTest');
+    const data = await models.products.updateProducts(2, 'nameTest');
+
+    expect(data).to.be.deep.eq({ id: 2, name: 'nameTest' });
   });
+
+  it('Retorno correto de busca pelo nome do produto', async () => {
+    sinon.stub(connection, "execute").resolves([[dataMock[0]]]);
+
+    const [result] = await models.products.getBySearchTerm("martelo");
+
+    expect(result).to.equal(dataMock[0]);
+  });
+
+  it('Exclusão de produto pelo id', async () => {
+    sinon.stub(connection, "execute").resolves([[{ affectedRows: 1 }]]);
+
+    const [result] = await models.products.deleteProductById(1);
+
+    expect(result.affectedRows).to.equal(1);
+  });
+
   afterEach(sinon.restore);
 });
