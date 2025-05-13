@@ -23,17 +23,13 @@ async function findProductSaleById(id) {
 };
 
 async function findAll() {
-  const [data] = await connection.execute('SELECT * FROM StoreManager.sales ORDER BY id');
-  const [dataSales] = await connection.execute('SELECT * FROM StoreManager.sales_products ORDER BY sale_id');
-
-  const saleMap = dataSales.map((sale) => {
-    const saleId = sale.sale_id;
-    const productId = sale.product_id;
-    const { quantity } = sale;
-    const { date } = data[saleId - 1];
-    return { saleId, productId, quantity, date };
-  });
-  return saleMap;
+  const [data] = await connection.execute(
+    `SELECT sale_id saleId, date, product_id productId, quantity
+      FROM StoreManager.sales_products sp
+      JOIN StoreManager.sales s ON sp.sale_id = s.id
+      ORDER BY product_id`,
+  );
+  return data;
 };
 
 async function deleteSales(id) {
