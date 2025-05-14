@@ -54,5 +54,7 @@ describe('Testa camada model de produtos', () => {
     expect(result.affectedRows).to.equal(1);
   });
 
-  afterEach(sinon.restore);
+  afterEach(() => {
+    sinon.restore();
+  });
 });

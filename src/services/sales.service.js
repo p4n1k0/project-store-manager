@@ -62,7 +62,7 @@ async function updateSale (id, saleUpdateArray) {
   const foundSale = await findById(id);
   if (foundSale.type) return foundSale;
   
-  await models.sales.updateSale(id, saleUpdateArray);
+  models.sales.updateSale(id, saleUpdateArray);
   return { type: null };
 };
 
