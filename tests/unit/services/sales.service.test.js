@@ -14,7 +14,13 @@ const sales = [
         "productId": 2,
         "quantity": 5
     }
-]
+];
+
+const returnAllSales = [
+    { date: '2022-09-11T20:38:35.000Z', productId: 1, quantity: 5 },
+    { date: '2022-09-11T20:38:35.000Z', productId: 2, quantity: 10 },
+    { date: '2022-09-11T20:38:35.000Z', productId: 3, quantity: 15 }
+];
 
 const saleCreated = {
     fieldCount: 0,
@@ -66,7 +72,32 @@ describe('Testando camada de serviço Sales', () => {
         ]
         const data = await services.sales.newSale(salesCreate, { id: saleCreated.insertId });
 
-        expect(data).to.be.deep.eq({ type: 404, message: 'Product not found' });
+        expect(data.type).to.be.deep.eq(404);
+        expect(data.message).to.be.deep.eq('Product not found');
+    });
+
+    it('Validação EditProduct Productid que não existe', async () => {
+        sinon.stub(models.sales, 'updateSale').resolves(saleEdited);
+        sinon.stub(models.sales, 'findProductSaleById').resolves(dataMock.pop());
+
+        const sales = [
+            {
+                "productId": 1,
+                "quantity": 1
+            },
+            {
+                "productId": 2,
+                "quantity": 5
+            },
+            {
+                "productId": 80,
+                "quantity": 5
+            }
+        ];
+        const data = await services.sales.updateSale(2, sales);
+
+        expect(data.type).to.be.deep.eq(404);
+        expect(data.message).to.be.deep.eq('Product not found');
     });
 
     it('Retorna todas as vendas', async () => {
@@ -74,7 +105,7 @@ describe('Testando camada de serviço Sales', () => {
 
         const data = await services.sales.findAll();
 
-        expect(data).to.eq(allSales);
+        expect(data).to.be.deep.eq(allSales);
     });
 
     it('Erro ao buscar venda por id inexistente', async () => {
@@ -83,7 +114,7 @@ describe('Testando camada de serviço Sales', () => {
         try {
             await services.sales.findById(999);
         } catch (error) {
-            expect(error.message).to.eq('Sale not found');
+            expect(error.message).to.be.deep.eq('Sale not found');
         }
     });
 
@@ -92,7 +123,7 @@ describe('Testando camada de serviço Sales', () => {
 
         const { type, message } = await services.sales.findSaleById(1);
 
-        expect(type).to.eq(null);
+        expect(type).to.be.deep.eq(null);
         expect(message).to.be.deep.eq([allSales[0], allSales[1]]);
     });
 
@@ -101,7 +132,7 @@ describe('Testando camada de serviço Sales', () => {
 
         const { type, message } = await services.sales.deleteSales(999);
 
-        expect(type).to.eq('NOT_FOUND');
+        expect(type).to.be.deep.eq('NOT_FOUND');
         expect(message).to.be.deep.eq('Sale not found');
     });
 
@@ -117,16 +148,10 @@ describe('Testando camada de serviço Sales', () => {
 
         const data = await services.sales.deleteSales(2);
 
-        expect(data.type).to.be.deep.equal(null);
+        expect(data.type).to.be.deep.eq(null);
     });
 
     it('Editando produto', async () => {
-        const returnAllSales = [
-            { date: '2022-09-11T20:38:35.000Z', productId: 1, quantity: 5 },
-            { date: '2022-09-11T20:38:35.000Z', productId: 2, quantity: 10 },
-            { date: '2022-09-11T20:38:35.000Z', productId: 3, quantity: 15 }
-        ];
-
         sinon.stub(models.sales, 'updateSale').resolves(saleEdited);
         sinon.stub(models.sales, 'findSaleById').resolves(returnAllSales[0], returnAllSales[1]);
 
@@ -135,11 +160,11 @@ describe('Testando camada de serviço Sales', () => {
         expect(data.type).to.be.deep.eq(null);
     });
 
-    it('Editando por id inexistente', async () => {
+    it('Editando venda por id inexistente', async () => {
         sinon.stub(models.sales, 'updateSale').resolves([]);
         const { type, message } = await services.sales.updateSale(1000, sales);
 
-        expect(type).to.eq(404);
+        expect(type).to.be.deep.eq(404);
         expect(message).to.be.deep.eq('Sale not found');
     });
 

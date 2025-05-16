@@ -11,13 +11,13 @@ const { expect } = chai;
 
 chai.use(chaiHttp);
 
-describe('Testa camada controller da aplicação', () => {
+describe('Testa camada controller da aplicação produtos', () => {
   it('Testa se todos os produtos estão na lista', async () => {
     sinon.stub(connection, 'execute').resolves([[dataMock]]);
 
     const data = await chai.request(app).get('/products').send();
 
-    expect(data.status).to.be.eq(200);
+    expect(data.status).to.be.deep.eq(200);
   });
 
   it('Testa se é possível buscar produto pelo id', async () => {
@@ -25,7 +25,7 @@ describe('Testa camada controller da aplicação', () => {
 
     const data = await chai.request(app).get('/products/1').send();
 
-    expect(data.status).to.be.eq(200);
+    expect(data.status).to.be.deep.eq(200);
   });
 
   it('Testa busca de um id inválido', async () => {
@@ -33,7 +33,7 @@ describe('Testa camada controller da aplicação', () => {
 
     const data = await chai.request(app).get('/products/666').send();
 
-    expect(data.status).to.be.eq(404);
+    expect(data.status).to.be.deep.eq(404);
     expect(data.body).to.be.deep.eq({ message: 'Product not found' });
   });
 
@@ -42,7 +42,7 @@ describe('Testa camada controller da aplicação', () => {
 
     const data = await chai.request(app).post('/products').send({ name: '' });
 
-    expect(data.status).to.be.eq(400);
+    expect(data.status).to.be.deep.eq(400);
     expect(data.body).to.be.deep.eq({ message: '"name" is required' });
   });
 
@@ -51,7 +51,7 @@ describe('Testa camada controller da aplicação', () => {
 
     const data = await chai.request(app).post('/products').send({ name: 'test' });
 
-    expect(data.status).to.be.eq(422);
+    expect(data.status).to.be.deep.eq(422);
     expect(data.body).to.be.deep.eq({ message: '"name" length must be at least 5 characters long' });
   });
 
@@ -60,7 +60,7 @@ describe('Testa camada controller da aplicação', () => {
 
     const data = await chai.request(app).post('/products').send({ id: 4, name: 'test04' });
 
-    expect(data.status).to.be.eq(201);
+    expect(data.status).to.be.deep.eq(201);
     expect(data.body).to.be.deep.eq({ name: 'test04' });
   });
 
@@ -69,7 +69,7 @@ describe('Testa camada controller da aplicação', () => {
 
     const data = await chai.request(app).put('/products/4').send({ name: 'testUpdate' });
 
-    expect(data.status).to.be.eq(404);
+    expect(data.status).to.be.deep.eq(404);
     expect(data.body).to.be.deep.eq({ message: 'Product not found' });
   });
 
@@ -78,7 +78,7 @@ describe('Testa camada controller da aplicação', () => {
 
     const data = await chai.request(app).put('/products/1').send({ name: 'testUpdate' });
 
-    expect(data.status).to.be.eq(200);
+    expect(data.status).to.be.deep.eq(200);
     expect(data.body).to.be.deep.eq({ name: 'testUpdate' });
   });
 
@@ -87,7 +87,7 @@ describe('Testa camada controller da aplicação', () => {
 
     const data = await chai.request(app).delete('/products/4').send();
 
-    expect(data.status).to.be.eq(404);
+    expect(data.status).to.be.deep.eq(404);
     expect(data.body).to.be.deep.eq({ message: 'Product not found' });
   });
 
@@ -96,7 +96,7 @@ describe('Testa camada controller da aplicação', () => {
 
     const data = await chai.request(app).delete('/products/1').send();
 
-    expect(data.status).to.be.eq(204);
+    expect(data.status).to.be.deep.eq(204);
   });
 
   it('Buscando produto por letra', async () => {
@@ -106,12 +106,14 @@ describe('Testa camada controller da aplicação', () => {
     res.json = sinon.stub().returns(dataMock[0]);
 
     sinon.stub(service.products, 'getBySearchTerm').resolves(dataMock[0]);
-  
+
     await controller.products.getBySearchTerm(req, res);
-  
+
     sinon.assert.calledWith(res.status, 200);
     sinon.assert.calledWith(res.json, dataMock[0]);
   });
 
-  afterEach(sinon.restore);
+  afterEach(() => {
+    sinon.restore();
+  });
 });
