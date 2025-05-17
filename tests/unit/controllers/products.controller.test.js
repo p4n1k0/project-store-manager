@@ -11,8 +11,8 @@ const { expect } = chai;
 
 chai.use(chaiHttp);
 
-describe('Testa camada controller da aplicação produtos', () => {
-  it('Testa se todos os produtos estão na lista', async () => {
+describe('Testa camada controller de produtos', () => {
+  it('Retorna todos os produtos da lista', async () => {
     sinon.stub(connection, 'execute').resolves([[dataMock]]);
 
     const data = await chai.request(app).get('/products').send();
@@ -20,7 +20,7 @@ describe('Testa camada controller da aplicação produtos', () => {
     expect(data.status).to.be.deep.eq(200);
   });
 
-  it('Testa se é possível buscar produto pelo id', async () => {
+  it('Busca produto pelo id', async () => {
     sinon.stub(connection, 'execute').resolves([[dataMock[0]]]);
 
     const data = await chai.request(app).get('/products/1').send();
@@ -28,10 +28,10 @@ describe('Testa camada controller da aplicação produtos', () => {
     expect(data.status).to.be.deep.eq(200);
   });
 
-  it('Testa busca de um id inválido', async () => {
+  it('Tenta busca de um id inválido', async () => {
     sinon.stub(connection, 'execute').resolves([dataMock[0]]).onSecondCall().resolves([dataMock]);
 
-    const data = await chai.request(app).get('/products/666').send();
+    const data = await chai.request(app).get('/products/777').send();
 
     expect(data.status).to.be.deep.eq(404);
     expect(data.body).to.be.deep.eq({ message: 'Product not found' });
@@ -46,7 +46,7 @@ describe('Testa camada controller da aplicação produtos', () => {
     expect(data.body).to.be.deep.eq({ message: '"name" is required' });
   });
 
-  it('Testa tamanho de caracteres do nome do produto', async () => {
+  it('Tamanho de caracteres do nome do produto', async () => {
     sinon.stub(connection, 'execute').resolves([{ id: 4, name: 'test04' }]);
 
     const data = await chai.request(app).post('/products').send({ name: 'test' });
@@ -55,7 +55,7 @@ describe('Testa camada controller da aplicação produtos', () => {
     expect(data.body).to.be.deep.eq({ message: '"name" length must be at least 5 characters long' });
   });
 
-  it('Testa se é possível adicionar um produto', async () => {
+  it('cadastra um produto', async () => {
     sinon.stub(connection, 'execute').resolves([{ id: 4, name: 'test04' }]);
 
     const data = await chai.request(app).post('/products').send({ id: 4, name: 'test04' });
