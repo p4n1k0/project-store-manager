@@ -1,7 +1,7 @@
 const connection = require('./connection');
 
 async function newSale(sales) {
-  const [data] = await connection.execute('INSERT INTO StoreManager.sales (date) VALUES (NOW())');
+  const [data] = await connection.execute('INSERT INTO StoreManager.sales () VALUES ()');
   const saleId = data.insertId;
   let saleMap = sales.map((sale) => [saleId, sale.productId, sale.quantity]);
   saleMap = saleMap.map((product) => product.join(','));
@@ -37,7 +37,7 @@ async function deleteSales(id) {
   return data;
 };
 
-function updateSale(id, saleUpdateArray) {
+async function updateSale(id, saleUpdateArray) {
   saleUpdateArray.forEach(async (sale) => {
     await connection.execute(`UPDATE StoreManager.sales_products SET product_id = ?, quantity = ? WHERE sale_id = ? AND product_id = ?`,
       [sale.productId, sale.quantity, id, sale.productId],);

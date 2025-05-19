@@ -4,31 +4,23 @@ const sinon = require("sinon");
 const connection = require("../../../src/models/connection");
 const models = require("../../../src/models");
 
-const { saleById, allSales } = require('../mocks/sales.model.mock');
+const { salesMock, newSale, saleUpdate } = require('../mocks/sales.model.mock');
 
-describe('Teste unidade models de vendas', () => {
-    it('Retorna todas as vendas', async () => {
-        sinon.stub(connection, 'execute').resolves([allSales]);
+describe('3 - Teste unidade models de vendas', () => {
+    it('cadastrando uma nova venda', async () => {        
+        sinon.stub(connection, 'execute').resolves([{ insertId: 2 }]);
 
-        const data = await models.sales.findAll();
+        const data = await models.sales.newSale(salesMock, newSale);
 
-        expect(data).to.be.deep.eq(allSales);
+        expect(data.id).to.be.deep.eq(2);
     });
 
-    it('Buscando uma venda por ID', async () => {
-        sinon.stub(connection, 'execute').resolves([[saleById]]);
+    it('realizando a atualização de uma venda', async () => {
+        sinon.stub(connection, 'execute').onFirstCall().resolves({}).onSecondCall().resolves({});
 
-        const data = await models.sales.findSaleById(2);
+        const data = await models.sales.updateSale(1, saleUpdate);
 
-        expect(data).to.be.deep.eq(saleById);
-    });
-
-    it('Deletando uma venda por ID', async () => {
-        sinon.stub(connection, 'execute').resolves([{ affectedRows: 1 }]);
-
-        const data = await models.sales.deleteSales(1);
-
-        expect(data.affectedRows).to.be.deep.eq(1);
+        expect(data).to.be.deep.eq(null);
     });
 
     afterEach(() => {

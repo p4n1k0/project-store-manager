@@ -5,89 +5,120 @@ const app = require('../../../src/app');
 const connection = require('../../../src/models/connection');
 const services = require('../../../src/services')
 const controllers = require('../../../src/controllers');
-const { allSales } = require('../mocks/sales.model.mock');
+const { allSales, notProduct, saleById, saleUpdate } = require('../mocks/sales.model.mock');
+const { dataMock } = require('../mocks/products.model.mock');
 
 const { expect } = chai;
 
 chai.use(chaiHttp);
 
+describe('5 - Testa camada controller Sales', () => {
+    it('erro ao criar venda sem produto', async () => {
+        sinon.stub(services.sales, 'newSale').resolves({ type: 404, message: 'Product not found' });
 
-describe('Testa camada controller de vendas', () => {
-    it('Retorno Ok ao cadastrar uma venda', async () => {
-        const req = {};
-        const res = {};
+        const data = await chai.request(app).post('/sales').send();
 
-        req.body = { name: 'ProdutoX' };
-        res.status = sinon.stub().returns(res);
-        res.json = sinon.stub().returns();
-
-        sinon.stub(services.sales, 'newSale').resolves({ id: 4, name: 'ProdutoX' });
-
-        await controllers.sales.newSale(req, res);
-
-        expect(res.json.args[0]).to.deep.equal([{ id: 4, name: 'ProdutoX' }]);
+        expect(data.status).to.be.deep.eq(404);
+        expect(data.body).to.be.deep.eq({ message: 'Product not found' });
     });
 
-    it('Retorna todas as vendas', async () => {
+    it('retorno Ok ao cadastrar uma venda', async () => {
+        sinon.stub(services.sales, 'newSale').resolves({ id: 4, name: 'ProdutoX' });
+
+        const data = await chai.request(app).post('/sales').send();
+
+        expect(data.status).to.be.deep.eq(201);
+        expect(data.body).to.be.deep.eq({ id: 4, name: 'ProdutoX' });
+    });
+
+    it('retorna todas as vendas', async () => {
         sinon.stub(connection, 'execute').resolves([[allSales]]);
 
         const data = await chai.request(app).get('/sales').send();
 
         expect(data.status).to.be.deep.eq(200);
+        expect(data.body).to.be.deep.eq([allSales]);
     });
 
-    it('Buscando venda pelo id', async () => {
+    it('buscando venda pelo id', async () => {
         sinon.stub(connection, 'execute').resolves([[allSales[0]]]);
 
-        const data = await chai.request(app).get('/sales/1').send();
+        const data = await chai.request(app).get('/sales/:id').send();
 
         expect(data.status).to.be.deep.eq(200);
     });
 
-    it('Erro ao buscar venda pelo id inválido', async () => {
-        sinon.stub(connection, 'execute').resolves([allSales[0]]).onSecondCall().resolves([allSales]);
+    it('erro ao buscar venda pelo id inválido', async () => {
+        sinon.stub(connection, 'execute').resolves([allSales[0]]);
 
-        const data = await chai.request(app).get('/sales/999').send();
+        const data = await chai.request(app).get('/sales/:id').send();
 
         expect(data.status).to.be.deep.eq(404);
         expect(data.body).to.be.deep.eq({ message: 'Sale not found' });
     });
 
-    it('Erro ao buscar venda com produto inexistente', async () => {
-        const req = {};
+    it('erro ao buscar venda com produto inexistente', async () => {
         const res = {};
-
-        req.params = { id: 19 };
         res.status = sinon.stub().returns(res);
         res.json = sinon.stub().returns();
 
         sinon.stub(services.sales, 'findSaleById').resolves({ message: 'Product not found' });
 
-        await controllers.sales.findSaleById(req, res);
-
-        expect(res.json.args[0]).to.deep.eq(['Product not found']);
+        await controllers.sales.findSaleById({ params: { id: 19 } }, res);
+       
+        expect(res.json.args[0]).to.be.deep.eq(['Product not found']);
     });
 
-    it('Deletando venda caso ela existe', async () => {
+    it('realizando a busca inválida de uma venda específica', async () => {
+        const res = {};
+        res.status = sinon.stub().returns(res);
+        res.json = sinon.stub().returns();
+
+        sinon.stub(services.sales, 'findSaleById').resolves({ type: 404, message: 'Sale not found' });
+
+        await controllers.sales.findSaleById({ params: { id: 1 } }, res);
+
+        sinon.assert.calledWith(res.status, 404);
+        sinon.assert.calledWith(res.json, { message: 'Sale not found' });
+    });
+
+    it('validação EditProduct', async () => {
+        sinon.stub(services.sales, 'updateSale').resolves(saleUpdate);
+
+        const data = await chai.request(app).put('/sales/1').send(saleUpdate);
+
+        expect(data.status).to.be.deep.eq(200);
+        expect(data.body).to.be.deep.eq({ saleId: '1', itemsUpdated: saleUpdate });
+    });
+
+    it('validação EditProduct id 100', async () => {        
+        sinon.stub(services.sales, 'updateSale').resolves({ type: 404, message: 'Product not found' })
+
+        const data = await chai.request(app).put('/sales/:id').send();
+
+        expect(data.status).to.be.deep.eq(404);
+        expect(data.body).to.be.deep.eq({ message: 'Product not found' });
+    });
+
+    it('deletando venda caso ela existe', async () => {
         sinon.stub(connection, 'execute').resolves([[allSales[0]]]);
 
-        const data = await chai.request(app).delete('/sales/1').send();
+        const data = await chai.request(app).delete('/sales/:id').send();
 
         expect(data.status).to.be.deep.eq(204);
+        expect(data.body).to.be.deep.eq({});
     });
 
-    it('Erro ao deletar uma venda pelo id inexistente', async () => {
-        sinon.stub(connection, 'execute').resolves([[allSales[5]]]);
+    it('erro ao deletar uma venda pelo id inexistente', async () => {
+        sinon.stub(connection, 'execute').resolves([[allSales[3]]]);
 
-        const data = await chai.request(app).delete('/sales/4').send();
+        const data = await chai.request(app).delete('/sales/:id').send();
 
         expect(data.status).to.be.deep.eq(404);
         expect(data.body).to.be.deep.eq({ message: 'Sale not found' });
     });
 
-
-
     afterEach(() => {
         sinon.restore();
     });
-})
+});
