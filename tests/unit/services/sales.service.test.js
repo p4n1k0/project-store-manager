@@ -10,7 +10,7 @@ const {
     notProduct,
     notQuantity,
     salesCreate,
-} = require('../mocks/sales.model.mock');
+} = require('../mocks/sales.mock');
 
 describe('4 - Testando camada de serviço Sales', () => {
     it('validando criação de nova venda', async () => {

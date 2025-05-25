@@ -1,5 +1,5 @@
 {
-  "name": "store-manager",
+  "name": "project-store-manager",
   "version": "1.0.0",
   "description": "Simple CRUD to sales and products",
   "main": "src/server.js",
