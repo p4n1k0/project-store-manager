@@ -3,7 +3,7 @@ const sinon = require('sinon');
 const services = require('../../../src/services');
 const models = require('../../../src/models');
 
-describe('1 - Testa da camada service de productos', () => {
+describe('1 - Testa da camada service de produtos', () => {
   it('retorno de erro ao tentar atualizar produto sem nome', async () => {
     sinon.stub(models.products, 'updateProducts').resolves(undefined);
 

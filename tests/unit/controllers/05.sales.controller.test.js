@@ -5,8 +5,7 @@ const app = require('../../../src/app');
 const connection = require('../../../src/models/connection');
 const services = require('../../../src/services')
 const controllers = require('../../../src/controllers');
-const { allSales, notProduct, saleById, saleUpdate } = require('../mocks/sales.model.mock');
-const { dataMock } = require('../mocks/products.model.mock');
+const { allSales, saleUpdate } = require('../mocks/sales.mock');
 
 const { expect } = chai;
 

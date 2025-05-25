@@ -3,7 +3,7 @@ const sinon = require('sinon');
 const chaiHttp = require('chai-http');
 const app = require('../../../src/app');
 const connection = require('../../../src/models/connection');
-const { dataMock } = require('../mocks/products.model.mock');
+const { dataMock } = require('../mocks/products.mock');
 
 const { expect } = chai;
 

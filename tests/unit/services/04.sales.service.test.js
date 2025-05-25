@@ -12,7 +12,7 @@ const {
     salesCreate,
 } = require('../mocks/sales.mock');
 
-describe('4 - Testando camada de serviço Sales', () => {
+describe('4 - Testando camada de serviço de vendas', () => {
     it('validando criação de nova venda', async () => {
         sinon.stub(models.sales, 'newSale').resolves({ id: saleCreated.insertId });
 

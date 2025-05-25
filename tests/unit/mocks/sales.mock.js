@@ -1,11 +1,3 @@
-const saleById = [
-  {
-    date: '2025-05-12T23:44:01.000Z',
-    productId: 3,
-    quantity: 15,
-  },
-];
-
 const allSales = [
   {
     saleId: 1,
@@ -132,7 +124,6 @@ const salesCreate = [
 ];
 
 module.exports = {
-  saleById,
   allSales,
   saleEdited,
   salesMock,
